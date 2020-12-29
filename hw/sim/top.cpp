@@ -14,14 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-`timescale 1ns / 1ps
+#include <verilated.h>
+#include "Vtop.h"
 
-module top(
-    input clk,
-    input [1:0]sw,
-    output uart_rxd_out
-    );
-
-    uart_tx uart_tx(.clk(clk), .send(sw[0]), .reset(sw[1]), .out(uart_rxd_out));
-
-endmodule
+int main(int argc, char** argv, char** env) {
+    exit(0);
+}
