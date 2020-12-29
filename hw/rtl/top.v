@@ -18,7 +18,7 @@ limitations under the License.
 
 module top(
     input clk,
-    input [3:0]sw,
+    input [1:0]sw,
     output uart_rxd_out
     );
 
