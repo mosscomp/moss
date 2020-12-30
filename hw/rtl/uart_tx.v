@@ -26,11 +26,11 @@ module uart_tx(
     reg [2:0] state;
 
     // states
-    parameter s_idle = 3'b000;
-    parameter s_start_bit = 3'b001;
-    parameter s_data_bit = 3'b010;
-    parameter s_stop_bit = 3'b011;
-    parameter s_cleanup = 3'b100;
+    localparam s_idle = 3'b000;
+    localparam s_start_bit = 3'b001;
+    localparam s_data_bit = 3'b010;
+    localparam s_stop_bit = 3'b011;
+    localparam s_cleanup = 3'b100;
 
     // clock cycles per bit transmitted
     // 100000000 / 9600 ~= 10416
