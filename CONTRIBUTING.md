@@ -10,7 +10,7 @@ that would be useful for others.
 The following sections describe testing that is performed on every commit to
 `moss`.
 
-### Hardware / Gateware
+### RTL (Register-Transfer Level)
 
 All RTL is simulated using [Verilator](https://github.com/verilator/verilator).
 Simulation can be run with the following commands:
