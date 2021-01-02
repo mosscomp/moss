@@ -1,0 +1,22 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request: {}
+  workflow_dispatch: {}
+
+jobs:
+  verilate:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: install verilator
+      run: sudo apt-get install -y verilator
+    - name: verilate
+      run: |
+        verilator -Wall -cc -Irtl top.v
+        make -C obj_dir -f Vtop.mk
+        verilator -Wall --cc -Irtl top.v --exe --build sim/top.cpp
+        ./obj_dir/Vtop
