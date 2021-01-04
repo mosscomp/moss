@@ -16,7 +16,6 @@ jobs:
       run: sudo apt-get install -y verilator
     - name: verilate
       run: |
-        verilator -Wall -cc -Irtl top.v
+        verilator -Wall -cc -Irtl top.v --exe sim/top.cpp
         make -C obj_dir -f Vtop.mk
-        verilator -Wall --cc -Irtl top.v --exe --build sim/top.cpp
         ./obj_dir/Vtop
