@@ -4,7 +4,13 @@ on:
   push:
     branches:
       - main
-  pull_request: {}
+    paths:
+     - 'rtl/**'
+     - 'sim/**'
+  pull_request:
+    paths:
+     - 'rtl/**'
+     - 'sim/**'
   workflow_dispatch: {}
 
 jobs:
