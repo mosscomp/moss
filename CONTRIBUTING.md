@@ -16,7 +16,7 @@ All RTL is simulated using [Verilator](https://github.com/verilator/verilator).
 Simulation can be run with the following commands:
 
 ```
-verilator -Wall --cc -Irtl top.v --exe --build sim/top.cpp
+verilator -Wall --cc -Irtl --trace top.v --exe --build sim/top.cpp
 ./obj_dir/Vtop
 ```
 
