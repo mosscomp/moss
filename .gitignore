@@ -1,2 +1,8 @@
 # verilator output
 obj_dir
+
+# build
+build/
+
+# miscellaneous
+scratch/
