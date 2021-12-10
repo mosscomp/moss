@@ -5,6 +5,10 @@ welcome here regardless of background or experience. Please feel free to
 contribute to this documentation if your own contributing experience yields tips
 that would be useful for others. 
 
+- [Testing and Simulation](#testing-and-simulation)
+- [Emulation](#emulation)
+- [Style](#style)
+
 ## Testing and Simulation
 
 The following sections describe testing that is performed on every commit to
@@ -52,3 +56,21 @@ $ qemu-system-riscv64 --version
 QEMU emulator version 5.2.0 (v5.2.0)
 Copyright (c) 2003-2020 Fabrice Bellard and the QEMU Project developers
 ```
+
+## Style
+
+The following sections describe the style best practices used throughout project
+development.
+
+### General
+
+All Moss source code / RTL and documentation is wrapped at 80 characters. This
+is primarily to facilitate referencing more granular sections during review.
+
+### Assembly
+
+Moss RISC-V assembly style matches the [best
+practices](https://docs.opentitan.org/doc/rm/asm_coding_style/) established by
+the [OpenTitan](https://docs.opentitan.org/) project. More information on RISC-V
+assembly can be found in the [official RISC-V Assembly Programmer's
+Manual](https://github.com/riscv-non-isa/riscv-asm-manual/blob/master/riscv-asm.md).
