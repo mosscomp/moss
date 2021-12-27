@@ -15,7 +15,11 @@ jobs:
     - name: install verilator
       run: sudo apt-get install -y verilator
     - name: verilate
+      # TODO(hasheddan): replace these with Makefile targets
       run: |
         verilator -Wall -cc -Irtl top.v --exe sim/top.cpp
         make -C obj_dir -f Vtop.mk
         ./obj_dir/Vtop
+        verilator -Wall -cc -Irtl alu.v --exe sim/alu.cpp
+        make -C obj_dir -f Valu.mk
+        ./obj_dir/Valu
