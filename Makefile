@@ -24,20 +24,16 @@ HARTS=1
 GDB=$(TOOLCHAIN)gdb
 OBJDUMP=$(TOOLCHAIN)objdump
 
-## Setup
-## =============
-
-setup:
-	@mkdir -p $(OUTDIR)
-
 ## Build
 ## =============
 
 $(OUTDIR)/%.o: $(SOURCES)
-	@$(AS) $(SOURCES) -o $@
+	@mkdir -p $(@D)
+	@$(AS) $^ -o $@
 
 $(BIN): $(OBJ)
-	@$(LD) -T$(LINKER_SCRIPT) $(OBJ) -o $@
+	@mkdir -p $(@D)
+	@$(LD) -T$(LINKER_SCRIPT) $^ -o $@
 
 build: $(BIN)
 
