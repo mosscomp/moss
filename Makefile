@@ -1,5 +1,11 @@
-# Config
-# =============
+# Disable builtin rules.
+.SUFFIXES:
+
+# Software
+# ==========================
+
+## Config
+## =============
 
 TOOLCHAIN=riscv64-unknown-elf-
 
@@ -10,7 +16,7 @@ LINKER_SCRIPT=$(OSDIR)/virt.ld
 SOURCES=$(wildcard $(OSDIR)/*.S)
 OUTDIR=build
 OBJ=$(OUTDIR)/mossos.o
-BIN=$(OUTDIR)/moss
+BIN=$(OUTDIR)/mossos
 
 QEMU=qemu-system-riscv64
 HARTS=1
@@ -18,25 +24,21 @@ HARTS=1
 GDB=$(TOOLCHAIN)gdb
 OBJDUMP=$(TOOLCHAIN)objdump
 
-# Setup
-# =============
+## Build
+## =============
 
-setup:
-	@mkdir -p $(OUTDIR)
+$(OUTDIR)/%.o: $(SOURCES)
+	@mkdir -p $(@D)
+	@$(AS) $^ -o $@
 
-# Build
-# =============
+$(BIN): $(OBJ)
+	@mkdir -p $(@D)
+	@$(LD) -T$(LINKER_SCRIPT) $^ -o $@
 
-as:
-	@$(AS) $(SOURCES) -o $(OBJ)
+build: $(BIN)
 
-link:
-	@$(LD) -T$(LINKER_SCRIPT) $(OBJ) -o $(BIN)
-
-build: as link
-
-# Debug
-# =============
+## Debug
+## =============
 
 qemu:
 	@$(QEMU) -machine virt -cpu rv64 -smp $(HARTS) -s -S  -nographic -bios none -kernel $(BIN)
@@ -45,4 +47,23 @@ gdb:
 	@$(GDB) $(BIN) -ex "target remote :1234"
 
 dump:
-	@$(OBJDUMP) -D $(BIN)
+	@$(OBJDUMP) -Dtr $(BIN)
+
+# Hardware
+# ==========================
+
+## Simulate
+## =============
+
+RTLDIR=rtl
+SIMDIR=sim
+SIMOUTDIR=obj_dir
+VERILATOR=verilator
+
+$(SIMOUTDIR)/%.o: $(SIMDIR)/%.cpp $(RTLDIR)/%.v
+	$(VERILATOR) -Wall --cc -I$(RTLDIR) --trace $*.v --exe --build $(SIMDIR)/$*.cpp
+
+verilate: $(SIMOUTDIR)/top.o $(SIMOUTDIR)/alu.o
+
+simulate.%: verilate
+	@$(SIMOUTDIR)/V$*
