@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="49" Path="/home/dan/code/github.com/mosscomputer/moss/toolchain/vivado/boards/xc7a35ticsg324-1l/xc7a35ticsg324-1l.xpr">
+<Project Version="7" Minor="49" Path="/home/dan/code/github.com/mosscomp/moss/toolchain/vivado/boards/xc7a35ticsg324-1l/xc7a35ticsg324-1l.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="944d562fd6124d98858265b7e6a4700f"/>
