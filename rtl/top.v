@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// timescale is formatted as <time_unit> / <time_precision>
 `timescale 1ns / 1ps
 
 module top(

@@ -37,9 +37,9 @@ module uart_tx(
     parameter cycles = 10416;
 
     integer clock_count = 0;
-    integer word_index = 1;
-    integer bit_index = 1;
-    reg [8*31:1] tx_data = "\n\r!retupmoC ssoM eht ot emocleW";
+    integer word_index = 247;
+    integer bit_index = 7;
+    reg [8*31-1:0] tx_data = "Welcome to the Moss Computer!\r\n";
     reg stop = 1'b0;
     
     always @(posedge clk) begin
@@ -55,7 +55,7 @@ module uart_tx(
                 else
                     begin
                         clock_count <= 0;
-                        bit_index <= 1;
+                        bit_index <= 7;
                         state <= s_data_bit;
                         if (reset)
                             begin
@@ -85,7 +85,7 @@ module uart_tx(
             end
         s_data_bit:
             begin
-                out <= tx_data[word_index];
+                out <= tx_data[word_index-bit_index];
                 if (clock_count < cycles-1)
                     begin
                         clock_count <= clock_count+1;
@@ -94,20 +94,20 @@ module uart_tx(
                 else
                     begin
                         clock_count <= 0;
-                        if (bit_index < 8)
+                        if (bit_index > 0)
                             begin
-                                bit_index <= bit_index+1;
-                                word_index <= word_index+1;
+                                bit_index <= bit_index-1;
                                 state <= s_data_bit;
                             end
                         else
                             begin
-                                bit_index <= 1;
-                                word_index <= word_index+1;
+                                bit_index <= 7;
+                                word_index <= word_index-8;
                                 state <= s_stop_bit;
                             end
                     end
             end
+            // 
         s_stop_bit:
             begin
                 out <= 1'b1;
@@ -124,9 +124,9 @@ module uart_tx(
             end
         s_cleanup:
             begin
-                if (word_index >= 247)
+                if (word_index < 7)
                     begin
-                        word_index <= 1;
+                        word_index <= 247;
                         stop <= 1'b1;
                     end
                 state <= s_idle;
