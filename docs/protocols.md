@@ -8,7 +8,6 @@
 
 - [Circuit Basics
   Tutorials](https://www.circuitbasics.com/basics-of-the-spi-communication-protocol)
-- [JTAG Explained](https://blog.senr.io/blog/jtag-explained)
 
 ## Simple Protocols
 
@@ -57,34 +56,6 @@ single wire communicating a signal over time.
   - Slower than SPI
   - Data frame size limited to 8 bits
   - More complicated hardware than SPI
-
-### Join Test Action Group (JTAG)
-
-- Codified in IEEE 1491
-- Used for debugging, programming, and testing
-- Gives you the ability to write 1's and 0's directly to chip pins
-- 4 pins, plus 1
-  - 4 standard pins, 1 optional additional pin
-  - These 4+ pins are referred to as a **Test Action Port (TAP)**
-- JTAG is _NOT_
-  - The name of a specific device
-  - The name of a piece of software
-  - The name of a protocol
-  - The name of a kind of connector
-- Signals
-  - **Test Clock (TCK)**: TAP controller accepts speed from external
-    device
-  - **Test Mode Select (TMS)**: control signal for JTAG
-  - **Test Data-In (TDI)**: 1's and 0's to be sent to the chip, protocol
-    is left to the implementation
-  - **Test Data-Out (TDO)**: 1's and 0's coming back from the chip,
-    protocol is left to the implementation
-  - (Optional) **Test Reset (TRST)**: resets JTAG to known good state,
-    optional because holding TMS at 1 (high) for five clock cycles also
-    essentially performs reset (progresses all the way through state
-    machine)
-- The presence of JTAG signal lines indicates the ability to control the
-  JTAG _state machine_, which is also defined in the IEEE standard
 
 ### Serial Peripheral Interface (SPI)
 
