@@ -19,7 +19,8 @@ limitations under the License.
 module uart_tx(
     input clk,
     input send,
-    input reset,
+    input [7:0] data,
+    output reg notif,
     output reg out
     );
 
@@ -37,40 +38,28 @@ module uart_tx(
     parameter cycles = 10416;
 
     integer clock_count = 0;
-    integer word_index = 247;
     integer bit_index = 7;
-    reg [8*31-1:0] tx_data = "Welcome to the Moss Computer!\r\n";
-    reg stop = 1'b0;
     
     always @(posedge clk) begin
         case (state)
         s_idle:
             begin
+                notif <= 1'b0;
                 out <= 1'b1;
-                if (clock_count < cycles-1)
-                    begin
-                        clock_count <= clock_count+1;
-                        state <= s_idle; 
-                    end
-                else
+                if (send == 1'b1)
                     begin
                         clock_count <= 0;
                         bit_index <= 7;
-                        state <= s_data_bit;
-                        if (reset)
-                            begin
-                                stop <= 1'b0;
-                            end
-                if (send == 1'b1 && !stop)
-                    begin
                         state <= s_start_bit;
                     end
                 else
-                    state <= s_idle;
+                    begin
+                        state <= s_idle;
                     end
             end
         s_start_bit:
             begin
+                notif <= 1'b1;
                 out <= 1'b0;
                 if (clock_count < cycles-1)
                     begin
@@ -85,7 +74,8 @@ module uart_tx(
             end
         s_data_bit:
             begin
-                out <= tx_data[word_index-bit_index];
+                notif <= 1'b1;
+                out <= data[bit_index];
                 if (clock_count < cycles-1)
                     begin
                         clock_count <= clock_count+1;
@@ -102,14 +92,13 @@ module uart_tx(
                         else
                             begin
                                 bit_index <= 7;
-                                word_index <= word_index-8;
                                 state <= s_stop_bit;
                             end
                     end
             end
-            // 
         s_stop_bit:
             begin
+                notif <= 1'b1;
                 out <= 1'b1;
                 if (clock_count < cycles-1)
                     begin
@@ -124,11 +113,8 @@ module uart_tx(
             end
         s_cleanup:
             begin
-                if (word_index < 7)
-                    begin
-                        word_index <= 247;
-                        stop <= 1'b1;
-                    end
+                notif <= 1'b1;
+                out <= 1'b1;
                 state <= s_idle;
             end
         default:
