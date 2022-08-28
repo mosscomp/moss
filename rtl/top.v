@@ -19,10 +19,15 @@ limitations under the License.
 
 module top(
     input clk,
-    input [1:0]sw,
-    output uart_rxd_out
+    input uart_txd_in,
+    output uart_rxd_out,
+    output [1:0]led
     );
 
-    uart_tx uart_tx(.clk(clk), .send(sw[0]), .reset(sw[1]), .out(uart_rxd_out));
+    wire [7:0] data;
+    wire send;
+    
+    uart_rx uart_rx(.clk(clk), .in(uart_txd_in), .notif(led[0]), .data(data), .send(send));
+    uart_tx uart_tx(.clk(clk), .send(send), .data(data), .notif(led[1]), .out(uart_rxd_out));
 
 endmodule
