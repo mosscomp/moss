@@ -16,12 +16,16 @@ limitations under the License.
 
 `timescale 1ns / 1ps
 
-module uart_tx(
+module uart_rx(
     input clk,
-    input send,
-    input [7:0] data,
+    input in,
+    // NOTE(hasheddan): the outputs below are declared as registers, which is
+    // essentially shorthand for instaniating a register and assigning the wire
+    // to it on every clock cycle.
+    // See https://stackoverflow.com/a/5360623
     output reg notif,
-    output reg out
+    output reg [7:0] data,
+    output reg send
     );
 
     reg [2:0] state;
@@ -45,11 +49,9 @@ module uart_tx(
         s_idle:
             begin
                 notif <= 1'b0;
-                out <= 1'b1;
-                if (send == 1'b1)
+                send <= 1'b0;                
+                if (in == 1'b0)
                     begin
-                        clock_count <= 0;
-                        bit_index <= 7;
                         state <= s_start_bit;
                     end
                 else
@@ -60,8 +62,8 @@ module uart_tx(
         s_start_bit:
             begin
                 notif <= 1'b1;
-                out <= 1'b0;
-                if (clock_count < cycles-1)
+                send <= 1'b0;
+                if (clock_count < (cycles-1 / 2))
                     begin
                         clock_count <= clock_count+1;
                         state <= s_start_bit; 
@@ -75,7 +77,8 @@ module uart_tx(
         s_data_bit:
             begin
                 notif <= 1'b1;
-                out <= data[bit_index];
+                send <= 1'b0;
+                data[bit_index] <= in;
                 if (clock_count < cycles-1)
                     begin
                         clock_count <= clock_count+1;
@@ -99,7 +102,7 @@ module uart_tx(
         s_stop_bit:
             begin
                 notif <= 1'b1;
-                out <= 1'b1;
+                send <= 1'b0;
                 if (clock_count < cycles-1)
                     begin
                         clock_count <= clock_count+1;
@@ -114,7 +117,8 @@ module uart_tx(
         s_cleanup:
             begin
                 notif <= 1'b1;
-                out <= 1'b1;
+                // Assert send after data has been read.
+                send <= 1'b1;
                 state <= s_idle;
             end
         default:
