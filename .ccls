@@ -1,0 +1,5 @@
+g++
+-I/usr/include/c++/11
+-I/usr/share/verilator/include
+-I/usr/share/verilator/include/vltstd
+-I./obj_dir
