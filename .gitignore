@@ -6,3 +6,6 @@ build/
 
 # miscellaneous
 scratch/
+
+# developer tools
+.ccls-cache/
