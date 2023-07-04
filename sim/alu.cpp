@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 #include <verilated.h>
-#include "verilated_vcd_c.h"
 #include "Valu.h"
 
 QData aluExec(Valu*& alu, QData a, QData b) {
