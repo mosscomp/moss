@@ -63,7 +63,7 @@ VERILATOR=verilator
 $(SIMOUTDIR)/%.o: $(SIMDIR)/%.cpp $(RTLDIR)/%.v
 	$(VERILATOR) -Wall --cc -I$(RTLDIR) --trace $*.v --exe --build $(SIMDIR)/$*.cpp
 
-verilate: $(SIMOUTDIR)/top.o $(SIMOUTDIR)/alu.o
+verilate: $(SIMOUTDIR)/top.o $(SIMOUTDIR)/alu.o $(SIMOUTDIR)/regfile.o
 
 simulate.%: verilate
 	@$(SIMOUTDIR)/V$*
