@@ -59,11 +59,15 @@ RTLDIR=rtl
 SIMDIR=sim
 SIMOUTDIR=obj_dir
 VERILATOR=verilator
+GTKWAVE=gtkwave
 
 $(SIMOUTDIR)/%.o: $(SIMDIR)/%.cpp $(RTLDIR)/%.v
 	$(VERILATOR) -Wall --cc -I$(RTLDIR) --trace $*.v --exe --build $(SIMDIR)/$*.cpp
 
-verilate: $(SIMOUTDIR)/top.o $(SIMOUTDIR)/alu.o
+verilate: $(SIMOUTDIR)/top.o $(SIMOUTDIR)/alu.o $(SIMOUTDIR)/regfile.o
 
 simulate.%: verilate
 	@$(SIMOUTDIR)/V$*
+
+wave.%: simulate.%
+	$(GTKWAVE) obj_dir/$*.vcd
