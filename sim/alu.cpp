@@ -48,8 +48,9 @@ int main(int argc, char** argv, char** env) {
 	// Pass all arguments to verilator.
 	Verilated::commandArgs(argc, argv);
 
-	// Initialize ALU. We don't trace in this test as the module is not clocked.
-	Valu *alu = new Valu;
+        // Initialize ALU. We don't trace in this test as the module is not
+        // clocked.
+        Valu *alu = new Valu;
 
 	if (opAnd(alu, 1, 2) != (1 & 2)) {
 		exit(EXIT_FAILURE);
