@@ -70,7 +70,8 @@ is primarily to facilitate referencing more granular sections during review.
 ### Assembly
 
 Moss RISC-V assembly style matches the [best
-practices](https://docs.opentitan.org/doc/rm/asm_coding_style/) established by
-the [OpenTitan](https://docs.opentitan.org/) project. More information on RISC-V
-assembly can be found in the [official RISC-V Assembly Programmer's
+practices](https://opentitan.org/book/doc/contributing/style_guides/asm_coding_style.html)
+established by the [OpenTitan](https://docs.opentitan.org/) project. More
+information on RISC-V assembly can be found in the [official RISC-V Assembly
+Programmer's
 Manual](https://github.com/riscv-non-isa/riscv-asm-manual/blob/master/riscv-asm.md).
