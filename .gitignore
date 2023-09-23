@@ -9,3 +9,9 @@ scratch/
 
 # developer tools
 .ccls-cache/
+
+# vivado
+.Xil/
+*.jou
+*.log
+*.str
