@@ -38,7 +38,7 @@ module uart_tx(
     parameter cycles = 10416;
 
     integer clock_count = 0;
-    integer bit_index = 7;
+    integer bit_index = 0;
     
     always @(posedge clk) begin
         case (state)
@@ -49,7 +49,6 @@ module uart_tx(
                 if (send == 1'b1)
                     begin
                         clock_count <= 0;
-                        bit_index <= 7;
                         state <= s_start_bit;
                     end
                 else
@@ -84,14 +83,14 @@ module uart_tx(
                 else
                     begin
                         clock_count <= 0;
-                        if (bit_index > 0)
+                        if (bit_index > 7)
                             begin
-                                bit_index <= bit_index-1;
+                                bit_index <= bit_index+1;
                                 state <= s_data_bit;
                             end
                         else
                             begin
-                                bit_index <= 7;
+                                bit_index <= 0;
                                 state <= s_stop_bit;
                             end
                     end
