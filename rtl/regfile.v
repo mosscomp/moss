@@ -16,7 +16,7 @@ limitations under the License.
 
 `timescale 1ns / 1ps
 
-module regfile(
+module regfile (
     input clk,
     input write_ctrl,
     input [4:0] rs1,
@@ -25,17 +25,16 @@ module regfile(
     input [63:0] data,
     output [63:0] rv1,
     output [63:0] rv2
-    );
+);
 
-    reg [63:0] registers [31:0];
+  reg [63:0] registers[31:0];
 
-    assign rv1 = registers[rs1];
-    assign rv2 = registers[rs2];
+  assign rv1 = registers[rs1];
+  assign rv2 = registers[rs2];
 
-    always @(posedge clk) begin
-        if (write_ctrl)
-	    begin
-	        registers[rd] <= data;
-            end
+  always @(posedge clk) begin
+    if (write_ctrl) begin
+      registers[rd] <= data;
     end
+  end
 endmodule

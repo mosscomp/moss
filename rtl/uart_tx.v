@@ -16,108 +16,87 @@ limitations under the License.
 
 `timescale 1ns / 1ps
 
-module uart_tx(
+module uart_tx (
     input clk,
     input send,
     input [7:0] data,
     output reg notif,
     output reg out
-    );
+);
 
-    reg [2:0] state;
+  reg [2:0] state;
 
-    // states
-    localparam s_idle = 3'b000;
-    localparam s_start_bit = 3'b001;
-    localparam s_data_bit = 3'b010;
-    localparam s_stop_bit = 3'b011;
-    localparam s_cleanup = 3'b100;
+  // states
+  localparam S_IDLE = 3'b000;
+  localparam S_START_BIT = 3'b001;
+  localparam S_DATA_BIT = 3'b010;
+  localparam S_STOP_BIT = 3'b011;
+  localparam S_CLEANUP = 3'b100;
 
-    // clock cycles per bit transmitted
-    // 100000000 / 9600 ~= 10416
-    parameter cycles = 10416;
+  // clock cycles per bit transmitted
+  // 100000000 / 9600 ~= 10416
+  parameter CYCLES = 10416;
 
-    integer clock_count = 0;
-    integer bit_index = 0;
-    
-    always @(posedge clk) begin
-        case (state)
-        s_idle:
-            begin
-                notif <= 1'b0;
-                out <= 1'b1;
-                if (send == 1'b1)
-                    begin
-                        clock_count <= 0;
-                        state <= s_start_bit;
-                    end
-                else
-                    begin
-                        state <= s_idle;
-                    end
-            end
-        s_start_bit:
-            begin
-                notif <= 1'b1;
-                out <= 1'b0;
-                if (clock_count < cycles-1)
-                    begin
-                        clock_count <= clock_count+1;
-                        state <= s_start_bit; 
-                    end
-                else
-                    begin
-                        clock_count <= 0;
-                        state <= s_data_bit;
-                    end
-            end
-        s_data_bit:
-            begin
-                notif <= 1'b1;
-                out <= data[bit_index];
-                if (clock_count < cycles-1)
-                    begin
-                        clock_count <= clock_count+1;
-                        state <= s_data_bit;    
-                    end
-                else
-                    begin
-                        clock_count <= 0;
-                        if (bit_index > 7)
-                            begin
-                                bit_index <= bit_index+1;
-                                state <= s_data_bit;
-                            end
-                        else
-                            begin
-                                bit_index <= 0;
-                                state <= s_stop_bit;
-                            end
-                    end
-            end
-        s_stop_bit:
-            begin
-                notif <= 1'b1;
-                out <= 1'b1;
-                if (clock_count < cycles-1)
-                    begin
-                        clock_count <= clock_count+1;
-                        state <= s_stop_bit;    
-                    end
-                else
-                    begin
-                        clock_count <= 0;
-                        state <= s_cleanup;
-                    end
-            end
-        s_cleanup:
-            begin
-                notif <= 1'b1;
-                out <= 1'b1;
-                state <= s_idle;
-            end
-        default:
-            state <= s_idle;
-        endcase
-    end
+  integer clock_count = 0;
+  integer bit_index = 0;
+
+  always @(posedge clk) begin
+    case (state)
+      S_IDLE: begin
+        notif <= 1'b0;
+        out   <= 1'b1;
+        if (send == 1'b1) begin
+          clock_count <= 0;
+          state <= S_START_BIT;
+        end else begin
+          state <= S_IDLE;
+        end
+      end
+      S_START_BIT: begin
+        notif <= 1'b1;
+        out   <= 1'b0;
+        if (clock_count < CYCLES - 1) begin
+          clock_count <= clock_count + 1;
+          state <= S_START_BIT;
+        end else begin
+          clock_count <= 0;
+          state <= S_DATA_BIT;
+        end
+      end
+      S_DATA_BIT: begin
+        notif <= 1'b1;
+        out   <= data[bit_index];
+        if (clock_count < CYCLES - 1) begin
+          clock_count <= clock_count + 1;
+          state <= S_DATA_BIT;
+        end else begin
+          clock_count <= 0;
+          if (bit_index > 7) begin
+            bit_index <= bit_index + 1;
+            state <= S_DATA_BIT;
+          end else begin
+            bit_index <= 0;
+            state <= S_STOP_BIT;
+          end
+        end
+      end
+      S_STOP_BIT: begin
+        notif <= 1'b1;
+        out   <= 1'b1;
+        if (clock_count < CYCLES - 1) begin
+          clock_count <= clock_count + 1;
+          state <= S_STOP_BIT;
+        end else begin
+          clock_count <= 0;
+          state <= S_CLEANUP;
+        end
+      end
+      S_CLEANUP: begin
+        notif <= 1'b1;
+        out   <= 1'b1;
+        state <= S_IDLE;
+      end
+      default: state <= S_IDLE;
+    endcase
+  end
 endmodule

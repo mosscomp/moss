@@ -18,32 +18,33 @@ limitations under the License.
 
 // ALU is passed a control signal and two arguments. It returns the result of
 // the operation, which should be the same size as the arguments.
-module alu(
+module alu (
     input [1:0] op,
-    input [63:0] arg1, arg2,
+    input [63:0] arg1,
+    arg2,
     output reg [63:0] result
-    );
+);
 
-    // operations
-    localparam op_and = 2'b00;
-    localparam op_or = 2'b01;
-    localparam op_add = 2'b10;
-    localparam op_sub = 2'b11;
+  // operations
+  localparam OP_AND = 2'b00;
+  localparam OP_OR = 2'b01;
+  localparam OP_ADD = 2'b10;
+  localparam OP_SUB = 2'b11;
 
-    always @(op, arg1, arg2) begin
-        case (op)
-            op_and: begin
-                result = arg1 & arg2;
-            end
-            op_or: begin
-                result = arg1 | arg2;
-            end
-            op_add: begin
-                result = arg1 + arg2;
-            end
-            op_sub: begin
-                result = arg1 - arg2;
-            end
-        endcase
-    end
+  always @(op, arg1, arg2) begin
+    case (op)
+      OP_AND: begin
+        result = arg1 & arg2;
+      end
+      OP_OR: begin
+        result = arg1 | arg2;
+      end
+      OP_ADD: begin
+        result = arg1 + arg2;
+      end
+      OP_SUB: begin
+        result = arg1 - arg2;
+      end
+    endcase
+  end
 endmodule
